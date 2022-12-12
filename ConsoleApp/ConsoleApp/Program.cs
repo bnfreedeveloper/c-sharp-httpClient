@@ -39,7 +39,10 @@ namespace ConsoleApp
                 {
                     Console.WriteLine(person.Name);
                 }
+
+               await new PostRequest().PostAsync();
                 Console.ReadLine();
+
             }
         }
     }

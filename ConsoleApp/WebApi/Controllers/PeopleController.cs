@@ -21,13 +21,20 @@ namespace WebApi.Controllers
         [HttpGet]   
         public async Task<ActionResult<List<Person>>> GetPeople()
         {
-            await _dbContext.Persons.AddRangeAsync(new Person[]
-            {
-                new Person() { Name ="jean valjeant"},
-                new Person() { Name ="dexter"}
-            });
-            await _dbContext.SaveChangesAsync();
+            //await _dbContext.Persons.AddRangeAsync(new Person[]
+            //{
+            //    new Person() { Name ="jean valjeant"},
+            //    new Person() { Name ="dexter"}
+            //});
+            //await _dbContext.SaveChangesAsync();
             return await _dbContext.Persons.ToListAsync();  
+        }
+        [HttpPost]  
+        public async Task<ActionResult<int>> PostPeople(Person person)
+        {
+            await _dbContext.AddAsync(person);
+            await _dbContext.SaveChangesAsync();
+            return person.Id;
         }
     }
 }
