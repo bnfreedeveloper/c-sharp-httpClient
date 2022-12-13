@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using WebApi.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Security.Claims;
 
 namespace WebApi
 {
@@ -61,6 +62,14 @@ namespace WebApi
                     ClockSkew = TimeSpan.Zero
 
                 };
+            });
+            //here a custome authorization policy
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("adminOnly", policy =>
+                 {
+                     policy.RequireClaim(ClaimTypes.Role, "admin");
+                 });
             });
             services.AddControllers();  
         }

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WebApi;
 
 namespace ConsoleApp
 {
@@ -57,6 +58,20 @@ namespace ConsoleApp
 
             }
         
+        }
+        public async Task GetRequestWithHeaderAuth(HttpClient httpClient)
+        {
+            var url = "https://localhost:5001/weatherForecast";
+            var responseWithNoStatusCode = await httpClient.GetStringAsync(url);
+            var weathers = JsonSerializer.Deserialize<List<WeatherForecast>>(responseWithNoStatusCode,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            foreach (var weather in weathers)
+            {
+                Console.WriteLine(weather);
+            }
+
+           // await new PostRequest().PostAsync();
+            Console.ReadLine();
         }
     }
 }
