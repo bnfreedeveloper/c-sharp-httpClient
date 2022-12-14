@@ -10,9 +10,9 @@ namespace ConsoleApp
 {
     public class PostRequest
     {
-        public async Task<int> PostAsync()
+        public async Task<int> PostAsync(Person person)
         {
-            var url = "https://localhost:5001/api/people";
+            var url = "https://localhost:5001/api/people/";
             int id = 0;
             var jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -20,15 +20,9 @@ namespace ConsoleApp
             };
             using (var httpCLient = new HttpClient())
             {
-                var newPerson = new Person()
-                {
-                    Name = "kendrick",
-                    Email="testMeantTofail"
-                };
-
                 //we need to specify to the string content constructor the encoding and mediatype
                 //the mediatype can be application/json or application/xml for ex
-                var content = new StringContent(JsonSerializer.Serialize(newPerson),Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonSerializer.Serialize(person),Encoding.UTF8, "application/json");
 
                var response = await httpCLient.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)

@@ -50,7 +50,7 @@ namespace ConsoleApp
                     Console.WriteLine(person.Name);
                 }
 
-                await new PostRequest().PostAsync();
+                //await new PostRequest().PostAsync();
 
 
 
@@ -69,9 +69,41 @@ namespace ConsoleApp
             {
                 Console.WriteLine(weather);
             }
-
-           // await new PostRequest().PostAsync();
             Console.ReadLine();
+        }
+
+        //generic function
+        public async Task GetRequestAuthHeader<T>(HttpClient httpClient) where T: class
+        {
+            Type type = typeof(T);
+            if(type == typeof(WeatherForecast))
+            {
+                var url = "https://localhost:5001/weatherForecast";
+                var responseWithNoStatusCode = await httpClient.GetStringAsync(url);
+                var weathers = JsonSerializer.Deserialize<List<WeatherForecast>>(responseWithNoStatusCode,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                foreach (var weather in weathers)
+                {
+                    Console.WriteLine(weather);
+                }
+                Console.ReadLine();
+            }
+            else if (type == typeof(Person))
+            {
+                var url = "https://localhost:5001/api/people/";
+                var responseWithNoStatusCode = await httpClient.GetStringAsync(url);
+                var persons = JsonSerializer.Deserialize<List<Person>>(responseWithNoStatusCode,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                foreach (var person in persons)
+                {
+                    Console.WriteLine(person.Name);
+                }
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("something went wrong,couldn't make the request");
+            }
         }
     }
 }
