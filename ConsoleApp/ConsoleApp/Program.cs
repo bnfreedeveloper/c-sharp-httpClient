@@ -9,6 +9,7 @@ using WebApi.Data;
 using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using ConsoleApp.HttpClients;
+using System.IO;
 
 namespace ConsoleApp
 {
@@ -105,6 +106,24 @@ namespace ConsoleApp
             //new PeopleHttpClient(services.GetRequiredService<IHttpClientFactory>());
 
             Console.WriteLine("success response for httpclientfactory typed client");
+
+            //files Management
+            var fileUrl = "https://localhost:5001/api/files/";
+            var fileRoute = @"C:\Users\gutz9\Desktop\real\httpClientDepth\ConsoleApp\TestExempleToSaveViaApi.txt";
+            var fileName = Path.GetFileName(fileRoute).Split(".")[0];
+            using(var requestContent = new MultipartFormDataContent())
+            {
+                using (var filestream = File.OpenRead(fileRoute))
+                {
+                    //the variable named "file" must match the name of the one for IFormFile
+                    requestContent.Add(new StreamContent(filestream),"file",fileName);
+                    requestContent.Headers.Add("folderCategory", "files");
+                    await services.GetRequiredService<IHttpClientFactory>()
+                                  .CreateClient()
+                                  .PostAsync(fileUrl, requestContent);
+                }
+            }
+            
 
             Console.ReadLine();
         }

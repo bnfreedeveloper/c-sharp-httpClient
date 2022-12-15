@@ -71,7 +71,10 @@ namespace WebApi
                      policy.RequireClaim(ClaimTypes.Role, "admin");
                  });
             });
-            services.AddControllers();  
+            services.AddControllers();
+
+            //register services for fileManagement 
+            services.AddTransient<FileManagement>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
